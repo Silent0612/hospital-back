@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzqc.cloud.dao.MedicalrecordMapper">
+    <resultMap id="BaseResultMap" type="com.dzqc.cloud.entity.Medicalrecord">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="userid" jdbcType="INTEGER" property="userid" />
+        <result column="doctorid" jdbcType="INTEGER" property="doctorid" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="diagnosis" jdbcType="VARCHAR" property="diagnosis" />
+        <result column="treatment" jdbcType="VARCHAR" property="treatment" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, userid, doctorid, description, diagnosis, treatment, create_time, update_time
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM medicalrecord
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM medicalrecord
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM medicalrecord
+        WHERE userid = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByUserIdPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM medicalrecord
+        WHERE userid = #{userId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM medicalrecord
+        WHERE doctorid = #{doctorid}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectTotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) 
+        FROM medicalrecord
+        WHERE doctorid = #{doctorid}
+    </select>
+
+    <insert id="insert" parameterType="com.dzqc.cloud.entity.Medicalrecord">
+        INSERT INTO medicalrecord (
+            userid, doctorid, description, diagnosis, treatment, create_time, update_time
+        )
+        VALUES (
+            #{userid}, #{doctorid}, #{description}, #{diagnosis}, #{treatment}, 
+            NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.dzqc.cloud.entity.Medicalrecord">
+        UPDATE medicalrecord
+        SET description = #{description},
+            diagnosis = #{diagnosis},
+            treatment = #{treatment},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.dzqc.cloud.entity.Medicalrecord">
+        UPDATE medicalrecord
+        SET userid = #{userid},
+            doctorid = #{doctorid},
+            description = #{description},
+            diagnosis = #{diagnosis},
+            treatment = #{treatment},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM medicalrecord 
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM medicalrecord 
+        WHERE id = #{id}
+    </delete>
+</mapper>

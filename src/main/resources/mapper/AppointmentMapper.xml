@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzqc.cloud.dao.AppointmentMapper">
+    <resultMap id="BaseResultMap" type="com.dzqc.cloud.entity.Appointment">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="doctor_id" jdbcType="INTEGER" property="doctorId" />
+        <result column="appointment_date" jdbcType="TIMESTAMP" property="appointmentDate" />
+        <result column="time_slot" jdbcType="VARCHAR" property="timeSlot" />
+        <result column="visit_type" jdbcType="INTEGER" property="visitType" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="fee" jdbcType="DECIMAL" property="fee" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="doctor_name" jdbcType="VARCHAR" property="doctorName" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+        <result column="diagnose_result" jdbcType="VARCHAR" property="diagnoseResult" />
+        <result column="prescription" jdbcType="VARCHAR" property="prescription" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="user_gender" jdbcType="INTEGER" property="userGender" />
+        <result column="user_age" jdbcType="INTEGER" property="userAge" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.dzqc.cloud.entity.Appointment">
+        insert into appointment (
+            user_id, doctor_id, appointment_date, time_slot, visit_type,
+            description, fee, status, create_time, doctor_name, 
+            department_name, diagnose_result, prescription,
+            user_name, user_gender, user_age
+        )
+        values (
+            #{userId}, #{doctorId}, #{appointmentDate}, #{timeSlot}, #{visitType},
+            #{description}, #{fee}, #{status}, #{createTime}, #{doctorName},
+            #{departmentName}, #{diagnoseResult}, #{prescription},
+            #{userName}, #{userGender}, #{userAge}
+        )
+    </insert>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT * FROM appointment
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByDoctorId" resultMap="BaseResultMap">
+        SELECT * FROM appointment
+        WHERE doctor_id = #{doctorId}
+        ORDER BY appointment_date ASC
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM appointment
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzqc.cloud.entity.Appointment">
+        update appointment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="doctorId != null">
+                doctor_id = #{doctorId},
+            </if>
+            <if test="appointmentDate != null">
+                appointment_date = #{appointmentDate},
+            </if>
+            <if test="timeSlot != null">
+                time_slot = #{timeSlot},
+            </if>
+            <if test="visitType != null">
+                visit_type = #{visitType},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="fee != null">
+                fee = #{fee},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="doctorName != null">
+                doctor_name = #{doctorName},
+            </if>
+            <if test="departmentName != null">
+                department_name = #{departmentName},
+            </if>
+            <if test="diagnoseResult != null">
+                diagnose_result = #{diagnoseResult},
+            </if>
+            <if test="prescription != null">
+                prescription = #{prescription},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="userGender != null">
+                user_gender = #{userGender},
+            </if>
+            <if test="userAge != null">
+                user_age = #{userAge},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="cancelAppointment">
+        UPDATE appointment 
+        SET status = 2 
+        WHERE id = #{id} AND status = 0
+    </update>
+</mapper> 
